@@ -1,8 +1,23 @@
-var schedule = {};
+var schedule = {
+
+};
 
 //loads schedule from localstorage onto the page
 var loadSchedule = function() {
     schedule = JSON.parse(localStorage.getItem('schedule'));
+    if (!schedule) {
+        schedule = {
+            row1: '',
+            row2: '',
+            row3: '',
+            row4: '',
+            row5: '',
+            row6: '',
+            row7: '',
+            row8: '',
+            row9: '',
+        }
+    };
     document.querySelector('#input1').value = schedule.row1;
     document.querySelector('#input2').value = schedule.row2;
     document.querySelector('#input3').value = schedule.row3;
