@@ -1,33 +1,23 @@
 var schedule = {};
 
+//loads schedule from localstorage onto the page
 var loadSchedule = function() {
-    schedule = JSON.parse(localStorage.getItem(schedule));
-    if (!schedule) {
-        schedule = {
-            row1: '',
-            row2: '',
-            row3: '',
-            row4: '',
-            row5: '',
-            row6: '',
-            row7: '',
-            row8: '',
-            row9: '',
-        }
-    };
-    $('#input1').val(schedule.row1);
-    $('#input2').val(schedule.row2);
-    $('#input3').val(schedule.row3);
-    $('#input4').val(schedule.row4);
-    $('#input5').val(schedule.row5);
-    $('#input6').val(schedule.row6);
-    $('#input7').val(schedule.row7);
-    $('#input8').val(schedule.row8);
-    $('#input9').val(schedule.row9);
-    console.log(schedule);
+    schedule = JSON.parse(localStorage.getItem('schedule'));
+    document.querySelector('#input1').value = schedule.row1;
+    document.querySelector('#input2').value = schedule.row2;
+    document.querySelector('#input3').value = schedule.row3;
+    document.querySelector('#input4').value = schedule.row4;
+    document.querySelector('#input5').value = schedule.row5;
+    document.querySelector('#input6').value = schedule.row6;
+    document.querySelector('#input7').value = schedule.row7;
+    document.querySelector('#input8').value = schedule.row8;
+    document.querySelector('#input9').value = schedule.row9;
 };
+
+//executes loading the schedule onto the page
 loadSchedule();
 
+//on any click of button, saves all text inputted into localstorage
 $('.btn').on('click', function() {
     schedule.row1 = document.querySelector('#input1').value;
     schedule.row2 = document.querySelector('#input2').value;
@@ -45,46 +35,51 @@ $('.btn').on('click', function() {
 //displays current day
 $('#currentDay').text(moment().format('MMMM Do YYYY'));
 
-$('#row1').on('click', '#task1', function() {
-    var text = $(this).text().trim();
-    var textInput = $("<textarea>").addClass('form-control').val(text);
-    $(this).replaceWith(textInput);
-    textInput.trigger('focus');
-});
 
-$('')
+//makes past time events gray, current red, and future green
+var colorChanger = function() {
+    time = moment().hour();
+    if (time < 9) {
+        $('#input1, #input2, #input3, #input4, #input5, #input6, #input7, #input8, #input9').addClass('bg-success');
+    } else if (time === 9) {
+        $('#input2, #input3, #input4, #input5, #input6, #input7, #input8, #input9').addClass('bg-success');
+        $('#input1').addClass('bg-danger');
+    } else if (time === 10) {
+        $('#input3, #input4, #input5, #input6, #input7, #input8, #input9').addClass('bg-success');
+        $('#input2').addClass('bg-danger');
+        $('#input1').addClass('bg-dark');
+    } else if (time === 11) {
+        $('#input4, #input5, #input6, #input7, #input8, #input9').addClass('bg-success');
+        $('#input3').addClass('bg-danger');
+        $('#input1, #input2').addClass('bg-dark');
+    } else if (time === 12) {
+        $('#input5, #input6, #input7, #input8, #input9').addClass('bg-success');
+        $('#input4').addClass('bg-danger');
+        $('#input1, #input2, #input3').addClass('bg-dark');
+    } else if (time === 13) {
+        $('#input6, #input7, #input8, #input9').addClass('bg-success');
+        $('#input5').addClass('bg-danger');
+        $('#input1, #input2, #input3, #input4').addClass('bg-dark');
+    } else if (time === 14) {
+        $('#input7, #input8, #input9').addClass('bg-success');
+        $('#input6').addClass('bg-danger');
+        $('#input1, #input2, #input3, #input4, #input5').addClass('bg-dark');
+    } else if (time === 15) {
+        $('#input8, #input9').addClass('bg-success');
+        $('#input7').addClass('bg-danger');
+        $('#input1, #input2, #input3, #input4, #input5, #input6').addClass('bg-dark');
+    } else if (time === 16) {
+        $('#input9').addClass('bg-success');
+        $('#input8').addClass('bg-danger');
+        $('#input1, #input2, #input3, #input4, #input5, #input6, #input7').addClass('bg-dark');
+    } else if (time === 17) {
+        $('#input9').addClass('bg-danger');
+        $('#input1, #input2, #input3, #input4, #input5, #input6, #input7, #input8').addClass('bg-dark');
+    } else if (time > 17) {
+        $('#input1, #input2, #input3, #input4, #input5, #input6, #input7, #input8, #input9').addClass('bg-dark');
+    }
+    console.log(time)
+}
 
-// setInterval(function() {
-//     var time = moment().format('hh:mm:ss a');
-//     if (moment().isBetween('00:00:00 am', '09:00:00 am')) {
-//         $('#task1, #task2, #task3, #task4, #task5, #task6, #task7, #task8, #task9').addClass('bg-success');
-//     } else if (moment().isBetween('09:00:00 am', '09:59:59 am')) {
-//         $('#task2, #task3, #task4, #task5, #task6, #task7, #task8, #task9').addClass('bg-success');
-//         $('#task1').addClass('bg-danger');
-//     } else if (moment().isBetween('10:00:00 am', '10:59:59 am')) {
-//         $('#task3, #task4, #task5, #task6, #task7, #task8, #task9').addClass('bg-success');
-//         $('#task2').addClass('bg-danger');
-//         $('#task1').addClass('bg-dark');
-//     } else if (moment().isBetween('11:00:00 am', '11:59:59 am')) {
-//         $('#task4, #task5, #task6, #task7, #task8, #task9').addClass('bg-success');
-//         $('#task3').addClass('bg-danger');
-//         $('#task1, #task2').addClass('bg-dark');
-//     } else if (moment().isBetween('12:00:00 pm', '12:59:59 pm' )) {
-//         $('#task5, #task6, #task7, #task8, #task9').addClass('bg-success');
-//         $('#task4').addClass('bg-danger');
-//         $('#task1, #task2, #task3').addClass('bg-dark');
-//     } else if (moment().isBetween('01:00:00 pm', '01:59:59 pm')) {
-//         $('#task6, #task7, #task8, #task9').addClass('bg-success');
-//         $('#task5').addClass('bg-danger');
-//         $('#task1, #task2, #task3, #task4').addClass('bg-dark');
-//     } else if (moment().isBetween('02:00:00 pm', '02:59:59 pm')) {
-//         $('#task7, #task8, #task9').addClass('bg-success');
-//         $('#task6').addClass('bg-danger');
-//         $('#task1, #task2, #task3, #task4, #task5').addClass('bg-dark');
-//     } else if (moment().isBetween('03:00:00 pm', '03:59:59 pm')) {
-//         $('#task8, #task9').addClass('bg-success');
-//         $('#task5').addClass('bg-danger');
-//         $('#task1, #task2, #task3, #task4').addClass('bg-dark');
-//     }
-//     console.log();
-// }, 5000);
+//executes the color changing function
+colorChanger();
